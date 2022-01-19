@@ -41,6 +41,9 @@ class QubesUpdater(Gtk.Application):
             __name__, 'updater.glade'))
 
         self.main_window = self.builder.get_object("main_window")
+        accelerators = Gtk.AccelGroup()
+        accelerators.connect(Gdk.keyval_from_name('A'), Gdk.ModifierType.CONTROL_MASK, 0, self.on_select_all)
+        self.main_window.add_accel_group(accelerators)
 
         self.vm_list = self.builder.get_object("vm_list")
 
@@ -144,6 +147,10 @@ class QubesUpdater(Gtk.Application):
                 self.next_button.set_sensitive(True)
                 return
             self.next_button.set_sensitive(False)
+
+    def on_select_all(self):
+        for vm_row in self.vm_list:
+            vm_row.checkbox.set_active(True)
 
     def set_update_available(self, _emitter):
         for vm_row in self.vm_list:
